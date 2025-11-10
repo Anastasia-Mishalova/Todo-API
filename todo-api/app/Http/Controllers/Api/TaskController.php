@@ -13,7 +13,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $tasks = Task::select('title','description','status') -> orderBy('created_at', 'desc')->get();
+        return response()->json($tasks);
     }
 
     /**
