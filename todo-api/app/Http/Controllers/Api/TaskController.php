@@ -42,6 +42,7 @@ class TaskController extends Controller
         if (!$task) {
             return response()->json('Task not found', 404);
         }
+        
         return response()->json($task);
     }
 
@@ -69,6 +70,12 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json('Task not found', 404);
+        }
+
+        $task->delete();
+        return response()->json(null, 204);
     }
 }
