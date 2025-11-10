@@ -13,7 +13,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::select('title','description','status') -> orderBy('created_at', 'desc')->get();
+        $tasks = Task::select('title', 'description', 'status')->orderBy('created_at', 'desc')->get();
         return response()->json($tasks);
     }
 
@@ -28,7 +28,7 @@ class TaskController extends Controller
             'status' => 'required|string|in:pending,in_progress,done',
         ]);
 
-        $task = Task::create($request->only(['title','description','status']));
+        $task = Task::create($request->only(['title', 'description', 'status']));
         return response()->json($task, 201);
     }
 
@@ -37,7 +37,11 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json('Task not found', 404);
+        }
+        return response()->json($task);
     }
 
     /**
