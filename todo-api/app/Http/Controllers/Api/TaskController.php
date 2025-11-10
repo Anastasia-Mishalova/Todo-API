@@ -37,6 +37,7 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
+        //оставила find, а не findOrFail, чтобы ошибка при неправильном id была нагляднее
         $task = Task::find($id);
         if (!$task) {
             return response()->json('Task not found', 404);
@@ -49,7 +50,18 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json('Task not found', 404);
+        }
+        $request->validate([
+            'title' => 'sometimes|required|string',
+            'description' => 'sometimes|nullable|string',
+            'status' => 'sometimes|required|string|in:pending,in_progress,done',
+        ]);
+
+        $task->update($request->only(['title', 'description', 'status']));
+        return response()->json($task);
     }
 
     /**
